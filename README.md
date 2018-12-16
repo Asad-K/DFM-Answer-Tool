@@ -1,11 +1,6 @@
 # DFM-Answer-Tool (http://www.drfrostmaths.com)
 Tool which answers Doctor Frost Maths questions.
-
 Instructions on how to use the tool are specified within the tool.
 
-# DEPRECIATED
-- Basic answer exploit still works
-- Authentication broken
-- Source lost somewhere so i can't fix it :(
-
-If you can somehow reverse the binary and retrieve the source, then get in touch
+bin -> contains standalone version of the tool, probably what your looking for
+src -> source code, probably what Dr Frost is looking for :)
