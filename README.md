@@ -4,4 +4,4 @@
 A tool which answers Doctor Frost Maths questions                                       
 Instructions on how to use the tool are specified within the tool
                                   
-src -> source code
+bin -> stand alone .exe file
