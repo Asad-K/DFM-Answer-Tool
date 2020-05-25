@@ -1,7 +1,7 @@
 from requests import Session
 from tkinter import *
 import tkinter.messagebox as tm
-from AnswerHandler import AnswerHandler
+from src.answer_handler import AnswerHandler
 import traceback
 import json
 
@@ -46,13 +46,14 @@ class Interface:
     """
     main interface between user and script
     """
+
     def __init__(self, email, password):
         self.session = Session()
         self.test_login(email, password)
         self.handler = AnswerHandler(self.session)
-        root.destroy()  # destroy login menu
-        self.print_init()
-        self.print_instructions()
+        # root.destroy()  # destroy login menu
+        # self.print_init()
+        # self.print_instructions()
         self.main_loop()
 
     def main_loop(self):
@@ -62,7 +63,8 @@ class Interface:
         """
         print('Press ctrl-c to quit')
         while True:
-            url = input('\nType Question url: ')
+            # url = input('\nType Question url: ')
+            url = "https://www.drfrostmaths.com/do-question.php?aaid=8890685"
             handler = AnswerHandler(self.session)
             res, err = handler.answer_questions(url)
             if res:
@@ -85,40 +87,33 @@ class Interface:
             res = self.session.get('https://www.drfrostmaths.com/homework/process-starttimestables.php')
             json.loads(res.text)
         except BaseException:
-            raise InvalidLoginDetails(f'Email: {email}, Password: {"*"*len(password)}')
+            raise InvalidLoginDetails(f'Email: {email}, Password: {"*" * len(password)}')
 
     @staticmethod
     def print_init():
         print_string = '---- Dr Frost Answer Tool v3 ----\n' \
-                       '----      Author: Asad    ----\n' \
+                       '----      Author: AK163631    ----\n' \
                        '*** Warning: this script has not been properly tested so might unexpectedly break ***\n' \
-                       'Source: https://github.com/AsadKhan163631/DFM-Answer-Tool\n' \
+                       'Source: https://github.com/AK163631/DFM-Answer-Tool\n' \
                        'The author does not assume any liability for the use or abuse of this program!\n' \
                        'This tool is intended to be used to check answers\n' \
                        'Although it submit most answer types for you\n' \
                        'Release notes:\n' \
-                       '    - Fixed login function\n' \
-                       '    - Restructured/Refactored\n' \
-                       "    - Added system to auto submit 'vector' answer type\n" \
-                       "    - Added system to auto submit 'table' answer type\n" \
-                       "    - Added system to auto submit 'list' answer type\n" \
-                       "    - Added system to auto submit 'shape' answer type\n" \
-                       "    - Improved system that auto submits 'numeric' answer type\n"
+                       '    - Fixed and optimised parser'
         print(print_string)
 
     @staticmethod
     def print_instructions():
         print_string = "\nstep1 - Login to dfm on both the tool and web browser\n" \
                        "step2 - Navigate to a set of assessment questions on dfm usually set by a teacher\n" \
-                       "Note: you can also use the tool for practice questions\n" \
+                       "Note: you can also use the tool for practice questions aswell\n" \
                        "step3 - When you start the questions you will be given a URL that look something like this:\n" \
                        "http://www.drfrostmaths.com/homework/do-question.php?aaid=590397\n" \
                        "OR like this:\n" \
                        "http://www.drfrostmaths.com/homework/do-question.php?aaid=590399&qnum=4\n" \
-                       "Note: It does not make a difference if you are in the middle of a set questions," \
-                       " the program will answer remaining questions\n" \
+                       "Note: It does not make a difference if you are in the middle of a set questions or at the " \
+                       "start, the program will answer remaining questions\n" \
                        "step5 - Copy the URL and paste it into the tool then press enter," \
-                       " don't worry if the numbers don't match they shouldn't\n" \
                        "step6 - The tool will find the answer to the question you" \
                        " are currently on and print it to the screen\n" \
                        "step7 - Input this into dfm and submit it, " \
@@ -132,10 +127,11 @@ class Interface:
 
 
 if __name__ == "__main__":
-    root = Tk()
-    root.protocol('WM_DELETE_WINDOW', sys.exit)
-    root.geometry('300x80')
-    root.title('DFM Login Screen')
-    lf = LoginFrame(root)
-    # wait for login to be retrieved
-    root.mainloop()
+    Interface("jutibohove@datasoma.com", "pass")
+    # root = Tk()
+    # root.protocol('WM_DELETE_WINDOW', sys.exit)
+    # root.geometry('300x80')
+    # root.title('DFM Login Screen')
+    # lf = LoginFrame(root)
+    # # wait for login to be retrieved
+    # root.mainloop()
