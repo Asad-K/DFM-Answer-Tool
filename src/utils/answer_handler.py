@@ -2,7 +2,8 @@ import functools
 import json
 import sys
 
-from src.parser import Parser, NoQuestionFound, AAID_REGEX, FIND_DIGIT_REGEX
+# noinspection PyUnresolvedReferences
+from utils.parser import Parser, NoQuestionFound, AAID_REGEX, FIND_DIGIT_REGEX
 
 
 class InvalidURLException(BaseException):

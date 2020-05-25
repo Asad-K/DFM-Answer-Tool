@@ -5,7 +5,8 @@ from tkinter import *
 
 from requests import Session
 
-from src.answer_handler import AnswerHandler
+# noinspection PyUnresolvedReferences
+from utils.answer_handler import AnswerHandler
 
 
 class InvalidLoginDetails(Exception):
