@@ -1,9 +1,9 @@
 import functools
 import json
 import sys
+from statistics import mean
 
 from parser_utils import Parser, NoQuestionFound, AAID_REGEX, FIND_DIGIT_REGEX
-from statistics import mean
 
 
 class InvalidURLException(BaseException):
@@ -24,8 +24,8 @@ def catch(func):
             return True, True
         except KeyboardInterrupt:
             sys.exit()  # quits script
-        # except BaseException as e:
-        #    return None, e
+        except BaseException as e:
+            return None, e
 
     return stub
 
