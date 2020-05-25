@@ -14,6 +14,7 @@ class ParseError(Exception):
 
 QNUM_REGEX = re.compile(r"var qnum = .+;")
 FIND_DIGIT_REGEX = re.compile(r"\d+")
+AAID_REGEX = re.compile(r"aaid=.+")
 
 
 class Parser:
@@ -24,15 +25,19 @@ class Parser:
     @staticmethod
     def parse(page: str):
         """
-        takes a page, finds the javascript tags.
-        Parses JSON objects from javascript to extract the qid, qnum and type
+        finds the javascript tags in question page then parses
+        JSON objects from javascript to extract the qid, qnum and type
         """
-        current_question_script = str(Parser.find_tags(page)[-4])
-        _json = list(Parser.extract_json(current_question_script))[0]  # extract json and select first object
-        qid = _json['id']
-        type_ = _json['answer']['type']
-        qnum = FIND_DIGIT_REGEX.findall(QNUM_REGEX.findall(current_question_script)[0])[0]  # extract question number
-        return {'qid': qid, 'qnum': qnum}, type_
+        try:
+            current_question_script = str(Parser.find_tags(page)[-4])
+            _json = list(Parser.extract_json(current_question_script))[0]  # extract json and select first object
+            qid = _json['id']
+            type_ = _json['answer']['type']
+            qnum = FIND_DIGIT_REGEX.findall(
+                QNUM_REGEX.findall(current_question_script)[0])[0]  # extract question number
+            return {'qid': qid, 'qnum': qnum}, type_
+        except (KeyError, IndexError) as e:
+            raise NoQuestionFound(e)
 
     @staticmethod
     def find_tags(page: str):

@@ -1,7 +1,17 @@
-from src.parser import Parser, NoQuestionFound
-import json
 import functools
+import json
 import sys
+
+from src.parser import Parser, NoQuestionFound, AAID_REGEX, FIND_DIGIT_REGEX
+
+
+class InvalidURLException(BaseException):
+    def __init__(self, url, *args):
+        self.__url = url
+        super().__init__(*args)
+
+    def __str__(self):
+        return f"Invalid URL {self.__url}"
 
 
 def catch(func):
@@ -9,12 +19,12 @@ def catch(func):
     def stub(self, *args, **kwargs):
         try:
             return func(self, *args, *kwargs)
-        # except NoQuestionFound:  # raised in parser, questions finished
-        #     return True, True
+        except NoQuestionFound:  # raised in parser, questions finished
+            return True, True
         except KeyboardInterrupt:
             sys.exit()  # quits script
-        # except BaseException as e:
-        #     return None, e
+        except BaseException as e:
+            return None, e
 
     return stub
 
@@ -52,7 +62,7 @@ class AnswerHandler:
     @catch
     def answer_questions(self, url: str, auto_submit=True):
         """
-        main loop answers all question util an error is raised
+        main loop answers questions util an error is raised
         due to no more questions, invalid input or connection errors.
 
         Decorator handles returns.
@@ -68,7 +78,10 @@ class AnswerHandler:
         repeat.
         """
 
-        aaid = url.split('=')[-1]
+        try:
+            aaid = FIND_DIGIT_REGEX.findall(AAID_REGEX.findall(url)[0])
+        except IndexError:
+            raise InvalidURLException(url)
 
         while True:  # main loop
             page = self.sesh.get(url, headers=self.headers).text  # get question page

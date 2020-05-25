@@ -1,9 +1,11 @@
-from requests import Session
-from tkinter import *
-import tkinter.messagebox as tm
-from src.answer_handler import AnswerHandler
-import traceback
 import json
+import tkinter.messagebox as tm
+import traceback
+from tkinter import *
+
+from requests import Session
+
+from src.answer_handler import AnswerHandler
 
 
 class InvalidLoginDetails(Exception):
@@ -51,9 +53,9 @@ class Interface:
         self.session = Session()
         self.test_login(email, password)
         self.handler = AnswerHandler(self.session)
-        # root.destroy()  # destroy login menu
-        # self.print_init()
-        # self.print_instructions()
+        root.destroy()  # destroy login menu
+        self.print_init()
+        self.print_instructions()
         self.main_loop()
 
     def main_loop(self):
@@ -63,8 +65,7 @@ class Interface:
         """
         print('Press ctrl-c to quit')
         while True:
-            # url = input('\nType Question url: ')
-            url = "https://www.drfrostmaths.com/do-question.php?aaid=8890685"
+            url = input('\nType Question url: ')
             handler = AnswerHandler(self.session)
             res, err = handler.answer_questions(url)
             if res:
@@ -81,8 +82,7 @@ class Interface:
         self.session.post(login_url, headers=headers, data=data)
         try:
             """
-            crude bad way of verifying authentication can be improved
-            tests if user can load times tables
+            verifying user is authenticated by tests if user can load the times tables
             """
             res = self.session.get('https://www.drfrostmaths.com/homework/process-starttimestables.php')
             json.loads(res.text)
@@ -114,24 +114,20 @@ class Interface:
                        "Note: It does not make a difference if you are in the middle of a set questions or at the " \
                        "start, the program will answer remaining questions\n" \
                        "step5 - Copy the URL and paste it into the tool then press enter," \
-                       "step6 - The tool will find the answer to the question you" \
-                       " are currently on and print it to the screen\n" \
-                       "step7 - Input this into dfm and submit it, " \
-                       "some answers are auto-submitted for you just refresh the web page\n" \
-                       "step8 - Press enter for the answer to the next question\n" \
-                       "Note: The tool will not continue to answer the next question until" \
-                       " you have submitted your answer or it has already been auto-submitted by the tool\n\n"
+                       "step6 - The tool will find the answer all remaining questions\n" \
+                       "Note: If completing practice questions the tool will submit answers indefinitely\n" \
+                       "Note: Rarely the tool may come across an unknown answer type which it is unable to handle." \
+                       "The tool will print this answer to the screen and you will need to input it manually"
         choice = input('Do you wish to read the guide on how to use the tool? (y/n): ')
         if choice == 'y':
             print(print_string)
 
 
 if __name__ == "__main__":
-    Interface("jutibohove@datasoma.com", "pass")
-    # root = Tk()
-    # root.protocol('WM_DELETE_WINDOW', sys.exit)
-    # root.geometry('300x80')
-    # root.title('DFM Login Screen')
-    # lf = LoginFrame(root)
-    # # wait for login to be retrieved
-    # root.mainloop()
+    root = Tk()
+    root.protocol('WM_DELETE_WINDOW', sys.exit)
+    root.geometry('300x80')
+    root.title('DFM Login Screen')
+    lf = LoginFrame(root)
+    # wait for login to be retrieved
+    root.mainloop()
